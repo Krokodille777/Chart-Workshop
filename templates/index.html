@@ -29,17 +29,17 @@
                     <h2>Log In</h2>
                 </div>
                 <div class = "login_body">
-                    <form method="post" action="/login">
+                    
                         <label for="username">Username:</label><br>
                         <input type="text" id="username" name="username" required><br>
                         <label for="password">Password:</label><br>
                         <input type="password" id="password" name="password" required><br><br>
                         <div id = "signUp_section">
                             <p>Don't have an account?</p>
-                            <button id = "signUp_button">Sign Up</button>
+                            <a id = "signUp_link">Sign Up</a>
                         </div>
                         <input type="submit" value="To Workshop">
-                    </form>
+                   
             </div>
         </div>
         <div id = "signUp_Modal">
@@ -48,7 +48,7 @@
                 <h2>Sign Up</h2>
             </div>
             <div class = "signUp_body">
-                <form method="post" action="/signup">
+               
                     <label for="new_username">Username:</label><br>
                     <input type="text" id="new_username" name="new_username" required><br>
                     <label for="new_password">Password:</label><br>
@@ -59,7 +59,7 @@
                     <label for="acceptCookies">We use cookies here! Please accept for better experience.</label>
                     <input type="checkbox" id="acceptCookies" name="acceptCookies" required><br><br>
                     <input type="submit" value="Create Account">
-                </form>
+
             </div>
         </div>
         <script src="{{ url_for('static', filename='script.js') }}"></script>
