@@ -19,7 +19,44 @@
         </div>
 
 
-        <div class = "Xtras"></div>
+        <div class = "Xtras">
+            <div id = "logIn_Modal">
+                <div class = "login_header">
+                    <span class="close" id="close_login">&times;</span>
+                    <h2>Log In</h2>
+                </div>
+                <div class = "login_body">
+                    <form method="post" action="/login">
+                        <label for="username">Username:</label><br>
+                        <input type="text" id="username" name="username" required><br>
+                        <label for="password">Password:</label><br>
+                        <input type="password" id="password" name="password" required><br><br>
+                        <div id = "signUp_section">
+                            <p>Don't have an account?</p>
+                            <button id = "signUp_button">Sign Up</button>
+                        </div>
+                        <input type="submit" value="Log In">
+                    </form>
+            </div>
+        </div>
+        <div id = "signUp_Modal">
+            <div class = "signUp_header">
+                <span class="close" id="close_signUp">&times;</span>
+                <h2>Sign Up</h2>
+            </div>
+            <div class = "signUp_body">
+                <form method="post" action="/signup">
+                    <label for="new_username">Username:</label><br>
+                    <input type="text" id="new_username" name="new_username" required><br>
+                    <label for="new_password">Password:</label><br>
+                    <input type="password" id="new_password" name="new_password" required><br><br>
+                    
+                    <input type="checkbox" id="terms" name="terms" required>
+                    <label for="terms"> I agree to the Terms and Conditions</label><br>
+                    <input type="submit" value="Sign Up">
+                </form>
+            </div>
+        </div>
         <script src="{{ url_for('static', filename='script.js') }}"></script>
     </body>
 </html>
