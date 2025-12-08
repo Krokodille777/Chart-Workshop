@@ -10,27 +10,38 @@ def index():
     return render_template("index.html")
 
 
-@app.route('/register', methods=['POST'])
+@app.route("/")
+def home():
+    return render_template("home.html")
+
+@app.route("/register", methods=['POST'])
 def register():
     data = request.get_json()
-    print("Received registration data:", data)
+    print("Отримані дані реєстрації:", data)
 
     username = data.get('username')
     password = data.get('password')
-    terms = data.get('terms')
-    accept_cookies = data.get('acceptCookies')
 
+    # Перевірка: чи існує вже такий користувач
     for user in users_db:
         if user['username'] == username:
-            return jsonify({'status': 'error', 'message': 'Username already exists.'}), 400
+            return jsonify({"message": "User already exists"}), 400
 
-    users_db.append({
-        'username': username,
-        'password': password,
-        'terms': terms,
-        'acceptCookies': accept_cookies
-    })
-    return jsonify({'status': 'success', 'message': 'User registered successfully.', 'user': username}), 201
+    if username and password:
+        # Зберігаємо користувача у наш список
+        users_db.append({
+            "username": username,
+            "password": password,
+            # Можна додати інші поля
+        })
+        print("Поточна база користувачів:", users_db) # Для перевірки в консолі
+        
+        return jsonify({
+            "message": "User created successfully", 
+            "username": username
+        }), 200
+    else:
+        return jsonify({"message": "Invalid data"}), 400
 
 @app.route('/login', methods=['POST'])
 def login():

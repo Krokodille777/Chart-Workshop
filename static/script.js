@@ -63,37 +63,75 @@ function createAccount( callback = function() {
     }
 }
 
-async function submitSignUpForm(event) {
-    event.preventDefault();
-    let userData = createAccount();
-    }
+function getDatafromSignUp(){
+    let username = document.getElementById("username").value;
 
+    
+    let password = document.getElementById("password").value;
+  
+    let agreeTerms = document.getElementById("terms").checked;
+
+    let acceptCookies = document.getElementById("acceptCookies").checked;
+
+    let info = {
+        "username": username,
+        "password": password,
+        "agreeTerms": agreeTerms,
+        "acceptCookies": acceptCookies
+    };
+    return info;
+}
+
+// === НОВА ЧАСТИНА: Функція відправки ===
+async function submitRegistration(event) {
+    // 1. Зупиняємо стандартне перезавантаження сторінки
+    event.preventDefault(); 
+
+    // 2. Отримуємо дані з твоєї функції
+    let userData = getDatafromSignUp();
+
+    // 3. Перевірка даних перед відправкою
+    if (userData.username === "" || userData.password === "") {
+        alert("Username and Password cannot be empty!");
+        return;
+    }
+    if (!userData.agreeTerms) {
+        alert("You must agree to the terms!");
+        return;
+    }
+    if (!userData.acceptCookies) {
+        alert("You must accept cookies!");
+        return;
+    }
+    // 4. Відправка на сервер через Fetch
     try {
-        let response = await fetch('/register', {
+        let response = await fetch('/register', { // Це адреса, яку ми створимо у Flask
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(userData)
+            body: JSON.stringify(userData) // Перетворюємо об'єкт у текст
         });
-        let result = await response.json();
-        console.log(result);
 
-        if (response.ok){
-            alert("Account created successfully!");
-            closeSignUpSpan.onclick();
-        }
-        else {
-            alert("Error: " + result.message);
-        }
-    }
-    catch (error) {
-        console.error('Error:', error);
-        alert("An error occurred while creating the account.");
-    }
+        let result = await response.json(); // Чекаємо відповідь від сервера
 
+        if (response.ok) {
+            console.log("Success:", result);
+            alert("Registration successful! Welcome, " + userData.username);
+            closeSignUpSpan.click();
+            openLogInModal.click();
+    
+        } else {
+            alert("Registration error: " + result.message);
+        }
+
+    } catch (error) {
+        console.error("Connection error:", error);
+        alert("Failed to connect to the server.");
+    }
+}
 let signUpForm = document.getElementById("signUp_form");
-signUpForm.addEventListener('submit', submitSignUpForm);
+signUpForm.addEventListener('submit', submitRegistration);
 
 
 
@@ -123,7 +161,8 @@ async function logIn(event) {
         if (response.ok) {
             console.log("Login Success:", result);
             alert("Login successful! Welcome back, " + result.username);
-            closeForm(loginForm); 
+            closeLoginSpan.click();
+            goToWorkshop();
         } else {
 
             alert("Login error: " + result.message);
@@ -134,8 +173,11 @@ async function logIn(event) {
         alert("Failed to connect to the server.");
     }
 }
+
+function goToWorkshop() {
+    window.location.href = "/workshop"; 
+}
+
+
 let loginForm = document.getElementById("login_form");
 loginForm.addEventListener('submit', logIn);
-
-
-
