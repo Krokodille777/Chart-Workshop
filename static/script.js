@@ -1,167 +1,138 @@
-// Секція "Регістрація та Логін"
+const mainLoginBtn = document.getElementById("main_login_btn");
+const goToSignUpLink = document.getElementById("go_to_signup_link");
 
-let signUpbtn = document.getElementById("signUp_link");
-let loginbtn = document.getElementById("login");
-let signUpForm = document.getElementById("signUp_body");
-let loginForm = document.getElementById("login_body");
-let closeSignUp = document.getElementById("close_signUp");
-let closeLogin = document.getElementById("close_login");
-let submitBtn = document.getElementById("signUp_form");
-let loginSubmitBtn = document.getElementById("login_form");
-let donthaveaccountlink = document.getElementById("havenotregistered");
-let signedUp = false;
+// Модальні вікна (обгортки)
+const loginModal = document.getElementById("logIn_Modal");
+const signUpModal = document.getElementById("signUp_Modal");
 
-function openSignUpForm() {
-    signUpForm.style.display = "flex";
-    signUpForm.style.flexDirection = "column";
-    signUpForm.style.alignItems = "center";
-    signUpForm.style.justifyContent = "center";
+// Кнопки закриття (хрестики)
+const closeLoginBtn = document.getElementById("close_login");
+const closeSignUpBtn = document.getElementById("close_signUp");
+
+// Кнопки відправки форм
+const submitLoginBtn = document.getElementById("submit_login");
+const submitSignUpBtn = document.getElementById("submit_signup");
+
+// === Функції управління модалками ===
+
+function openModal(modal) {
+    modal.style.display = "flex"; // Використовуємо flex, бо так задано в CSS для центрування
 }
 
-function openLoginForm() {
-    loginForm.style.display = "flex";
-    loginForm.style.flexDirection = "column";
-    loginForm.style.alignItems = "center";
-    loginForm.style.justifyContent = "center";
+function closeModal(modal) {
+    modal.style.display = "none";
 }
 
-
-function closeForm(form) {
-    form.style.display = "none";
+// Перехід від Логіну до Реєстрації
+function switchToSignUp() {
+    closeModal(loginModal);
+    openModal(signUpModal);
 }
 
-function getDatafromSignUp(){
-    let username = document.getElementById("username").value;
-    let password = document.getElementById("password").value;
-    let agreeTerms = document.getElementById("terms").checked;
+// === Слухачі подій (Event Listeners) ===
 
-    let info = {
-        "username": username,
+// Відкриття
+if(mainLoginBtn) mainLoginBtn.addEventListener("click", () => openModal(loginModal));
+if(goToSignUpLink) goToSignUpLink.addEventListener("click", switchToSignUp);
 
-        "password": password,
+// Закриття
+if(closeLoginBtn) closeLoginBtn.addEventListener("click", () => closeModal(loginModal));
+if(closeSignUpBtn) closeSignUpBtn.addEventListener("click", () => closeModal(signUpModal));
 
-        "agreeTerms": agreeTerms
-    };
-    return info;
+// Закриття при кліку за межами вікна
+window.onclick = function(event) {
+    if (event.target === loginModal) closeModal(loginModal);
+    if (event.target === signUpModal) closeModal(signUpModal);
 }
 
-// === НОВА ЧАСТИНА: Функція відправки ===
+// === РЕЄСТРАЦІЯ ===
+
 async function submitRegistration(event) {
-    // 1. Зупиняємо стандартне перезавантаження сторінки
-    event.preventDefault(); 
+    event.preventDefault();
 
-    // 2. Отримуємо дані з твоєї функції
-    let userData = getDatafromSignUp();
-
+    // Беремо дані саме з полів РЕЄСТРАЦІЇ (signup_...)
+    let usernameInput = document.getElementById("signup_username");
+    let passwordInput = document.getElementById("signup_password");
+    let termsCheckbox = document.getElementById("terms");
     
-    if (!userData.agreeTerms) {
+    let username = usernameInput.value;
+    let password = passwordInput.value;
+    let agreeTerms = termsCheckbox.checked;
+
+    if (!agreeTerms) {
         alert("You must agree to the terms!");
         return;
     }
+    
+    if (!username || !password) {
+        alert("Please fill in all fields");
+        return;
+    }
 
-    // 4. Відправка на сервер через Fetch
+    let userData = {
+        "username": username,
+        "password": password
+    };
+
     try {
-        let response = await fetch('/register', { // Це адреса, яку ми створимо у Flask
+        let response = await fetch('/register', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(userData) // Перетворюємо об'єкт у текст
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(userData)
         });
 
-        let result = await response.json(); // Чекаємо відповідь від сервера
+        let result = await response.json();
 
         if (response.ok) {
-            console.log("Success:", result);
-            alert("Registration successful! Welcome, " + userData.username);
-            closeForm(signUpForm); 
+            alert("Registration successful! Please Log In.");
+            closeModal(signUpModal);
+            openModal(loginModal); // Одразу відкриваємо логін
         } else {
             alert("Registration error: " + result.message);
         }
-
     } catch (error) {
-        console.error("Connection error:", error);
-        alert("Failed to connect to the server.");
+        console.error("Error:", error);
+        alert("Server connection failed.");
     }
 }
 
-function calculateAge(birthdate) {
-    let birth = new Date(birthdate);
-    let today = new Date();
-    let age = today.getFullYear() - birth.getFullYear();
+if (submitSignUpBtn) submitSignUpBtn.addEventListener("click", submitRegistration);
 
-    return age;
-}
-if (signUpForm) {
-    submitBtn.addEventListener("click", submitRegistration);
-}
 
+// === ЛОГІН ===
 
 async function logIn(event) {
     event.preventDefault();
 
-    let loginUsername = document.getElementById("login-username").value;
-    let loginPassword = document.getElementById("login-password").value;
+    // Беремо дані саме з полів ЛОГІНУ (login_...)
+    let username = document.getElementById("login_username").value;
+    let password = document.getElementById("login_password").value;
 
     try {
-
         let response = await fetch('/login', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                "username": loginUsername,
-                "password": loginPassword
+                "username": username,
+                "password": password
             })
         });
 
-
         let result = await response.json();
 
-   
         if (response.ok) {
-            console.log("Login Success:", result);
-            alert("Login successful! Welcome back, " + result.username);
-            closeForm(loginForm); 
+            alert("Login successful! Welcome, " + result.username);
+            closeModal(loginModal);
+            // Тут можна зробити перенаправлення, наприклад:
+            // window.location.href = "/workshop"; 
         } else {
-
             alert("Login error: " + result.message);
         }
 
     } catch (error) {
-        console.error("Connection error:", error);
-        alert("Failed to connect to the server.");
+        console.error("Error:", error);
+        alert("Server connection failed.");
     }
 }
 
-function  donthaveaccount() {
-    closeForm(loginForm);
-    openSignUpForm();
-}
-let loginFormElement = document.getElementById("login-form"); // Перевір, чи ID форми співпадає в HTML
-
-
-// Секція "Старт"
-
-function goToLoginFromStart() {
-    closeForm(start);
-    openLoginForm();
-}
-
-function PressStart() {
-    window.location.href = "/webEx";
-}
-
-let goToLoginBtn = document.getElementById("go-to-login");
-let pressStartBtn = document.getElementById("press-start");
-pressStartBtn.addEventListener("click", PressStart);
-goToLoginBtn.addEventListener("click", goToLoginFromStart);
-loginSubmitBtn.addEventListener("click", logIn);
-donthaveaccountlink.addEventListener("click", donthaveaccount);
-signUpbtn.addEventListener("click", openSignUpForm);
-loginbtn.addEventListener("click", openLoginForm);
-getStartedbtn.addEventListener("click", openGetStarted);
-closeSignUp.addEventListener("click", () => closeForm(signUpForm));
-closeLogin.addEventListener("click", () => closeForm(loginForm));
-closeStart.addEventListener("click", () => closeForm(start));
+if (submitLoginBtn) submitLoginBtn.addEventListener("click", logIn);

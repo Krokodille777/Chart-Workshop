@@ -9,59 +9,65 @@
     <body>
        
         <header class="header">
-            <nav><button class = "Profile">👤</button></nav>
-            <h1 id = "title">Diagram Builder</h1>
-        </header>
-        <hr>
-        <div class = "main">
-            <p id = "p1">Log In to start Building 🔨</p>
-            <button id = "login" onclick="location.href='/login'">Log In</button>
-        </div>
-        <hr>
-        <footer class="footer">
-            <p>© 2025 Diagram Builder. All rights reserved.</p>
-        </footer>
+        <nav><button class="Profile">👤</button></nav>
+        <h1 id="title">Diagram Builder</h1>
+    </header>
+    <hr>
+    <div class="main">
+        <p id="p1">Log In to start Building 🔨</p>
+        <button id="main_login_btn">Log In</button>
+    </div>
+    <hr>
+    <footer class="footer">
+        <p>© 2025 Diagram Builder. All rights reserved.</p>
+    </footer>
 
-        <div class = "Xtras">
-            <div id = "logIn_Modal">
-                <div class = "login_header">
-                    <span class="close" id="close_login">&times;</span>
-                    <h2>Log In</h2>
+    <div id="logIn_Modal" class="modal">
+        <div class="modal-content">
+            <div class="login_header">
+                <span class="close" id="close_login">&times;</span>
+                <h2>Log In</h2>
+            </div>
+            <div id="login_body">
+                <label for="login_username">Username:</label><br>
+                <input type="text" id="login_username" name="username" required><br>
+                
+                <label for="login_password">Password:</label><br>
+                <input type="password" id="login_password" name="password" required><br><br>
+                
+                <div id="signUp_section">
+                    <p>Don't have an account?</p>
+                    <a href="#" id="go_to_signup_link">Sign Up</a>
                 </div>
-                <div id = "login_body">
-                    
-                        <label for="username">Username:</label><br>
-                        <input type="text" id="username" name="username" required><br>
-                        <label for="password">Password:</label><br>
-                        <input type="password" id="password" name="password" required><br><br>
-                        <div id = "signUp_section">
-                            <p>Don't have an account?</p>
-                            <a id = "signUp_link">Sign Up</a>
-                        </div>
-                        <input id="login_form" type="submit" value="To Workshop">
-                   
+                <button id="submit_login">To Workshop</button>
             </div>
         </div>
-        <div id = "signUp_Modal">
-            <div class = "signUp_header">
+    </div>
+
+    <div id="signUp_Modal" class="modal">
+        <div class="modal-content">
+            <div class="signUp_header">
                 <span class="close" id="close_signUp">&times;</span>
                 <h2>Sign Up</h2>
             </div>
-            <div id = "signUp_body">
-               
-                    <label for="new_username">Username:</label><br>
-                    <input type="text" id="new_username" name="new_username" required><br>
-                    <label for="new_password">Password:</label><br>
-                    <input type="password" id="new_password" name="new_password" required><br><br>
-                    
-                    <input type="checkbox" id="terms" name="terms" required>
-                    <label for="terms"> I agree to the Terms and Conditions</label><br>
-                    <label for="acceptCookies">We use cookies here! Please accept for better experience.</label>
-                    <input type="checkbox" id="acceptCookies" name="acceptCookies" required><br><br>
-                    <button id="signUp_form" type="submit">Create Account</button>
-
+            <div id="signUp_body">
+                <label for="signup_username">Username:</label><br>
+                <input type="text" id="signup_username" required><br>
+                
+                <label for="signup_password">Password:</label><br>
+                <input type="password" id="signup_password" required><br><br>
+                
+                <input type="checkbox" id="terms" required>
+                <label for="terms"> I agree to the Terms</label><br>
+                
+                <label for="acceptCookies">Accept cookies?</label>
+                <input type="checkbox" id="acceptCookies" required><br><br>
+                
+                <button id="submit_signup">Create Account</button>
             </div>
         </div>
-        <script src="{{ url_for('static', filename='script.js') }}"></script>
-    </body>
+    </div>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
 </html>

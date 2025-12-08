@@ -2,68 +2,57 @@ from flask import Flask, render_template, jsonify, request
 
 app = Flask(__name__)
 
-# --- ТИМЧАСОВА БАЗА ДАНИХ (СПИСОК) ---
-# Тут будуть зберігатися користувачі, поки працює сервер
+# --- ТИМЧАСОВА БАЗА ДАНИХ ---
 users_db = [] 
 
 @app.route("/")
-def home():
-    return render_template("home.html")
+def index():
+    return render_template("index.html")
 
 @app.route("/register", methods=['POST'])
 def register():
     data = request.get_json()
-    print("Отримані дані реєстрації:", data)
-
+    
     username = data.get('username')
-    email = data.get('email')
     password = data.get('password')
 
-    # Перевірка: чи існує вже такий користувач
+    # Валідація
+    if not username or not password:
+        return jsonify({"message": "Missing username or password"}), 400
+
+    # Перевірка на існування
     for user in users_db:
         if user['username'] == username:
-            return jsonify({"message": "User already exists"}), 400
+            return jsonify({"message": "User already exists"}), 409 # 409 Conflict
 
-    if username and password:
-        # Зберігаємо користувача у наш список
-        users_db.append({
-            "username": username,
-            "email": email,
-            "password": password,
-            # Можна додати інші поля
-        })
-        print("Поточна база користувачів:", users_db) # Для перевірки в консолі
-        
-        return jsonify({
-            "message": "User created successfully", 
-            "username": username
-        }), 200
-    else:
-        return jsonify({"message": "Invalid data"}), 400
+    # Створення
+    new_user = {
+        "username": username,
+        "password": password
+    }
+    users_db.append(new_user)
+    
+    print(f"New user registered: {new_user}")
+    return jsonify({"message": "User created", "username": username}), 201
 
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
-    username_from_form = data.get('username')
-    password_from_form = data.get('password')
+    username_form = data.get('username')
+    password_form = data.get('password')
 
-    print(f"Спроба входу: {username_from_form}")
+    print(f"Login attempt: {username_form}")
 
-    # Шукаємо користувача у нашому списку users_db
     user_found = None
     for user in users_db:
-        if user['username'] == username_from_form:
+        if user['username'] == username_form:
             user_found = user
             break
 
-    # Перевіряємо пароль
-    if user_found and user_found['password'] == password_from_form:
-        return jsonify({
-            "message": "Login successful", 
-            "username": user_found['username']
-        }), 200
+    if user_found and user_found['password'] == password_form:
+        return jsonify({"message": "Success", "username": user_found['username']}), 200
     else:
-        print("Невірний логін або пароль")
         return jsonify({"message": "Invalid credentials"}), 401
+
 if __name__ == "__main__":
     app.run(port=5000, debug=True)
