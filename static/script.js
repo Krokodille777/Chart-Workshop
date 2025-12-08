@@ -1,148 +1,167 @@
-// Розробити вебсторінку з інтеграцію функціоналу відповідно до завдання та
-// реалізувати функцію встановлення, читання та видалення (скидання) відповідного
-// cookie. Користувацький ID для анонімної статистики. expires (2 роки)
+// Секція "Регістрація та Логін"
 
-let openLogInModal = document.getElementById("login");
-let logInModal = document.getElementById("logIn_Modal");
-let closeLogInSpan = document.getElementById("close_login");
-let openSignUpModal = document.getElementById("signUp_link");
-let signUpModal = document.getElementById("signUp_Modal");
-let closeSignUpSpan = document.getElementById("close_signUp");
+let signUpbtn = document.getElementById("signUp_link");
+let loginbtn = document.getElementById("login");
+let signUpForm = document.getElementById("signUp_body");
+let loginForm = document.getElementById("login_body");
+let closeSignUp = document.getElementById("close_signUp");
+let closeLogin = document.getElementById("close_login");
+let submitBtn = document.getElementById("signUp_form");
+let loginSubmitBtn = document.getElementById("login_form");
+let donthaveaccountlink = document.getElementById("havenotregistered");
+let signedUp = false;
 
-// открывашки и закрывашки модалок
-
-function openLogIn(){
-    openLogInModal.style.display = "flex";
-    openSignUpModal.style.display = "none";
-    openLogInModal.style.flexDirection = "column";
-    openLogInModal.style.alignItems = "center";
-    openLogInModal.style.justifyContent = "center";
-    console.log("Login modal opened");
+function openSignUpForm() {
+    signUpForm.style.display = "flex";
+    signUpForm.style.flexDirection = "column";
+    signUpForm.style.alignItems = "center";
+    signUpForm.style.justifyContent = "center";
 }
 
-function closeLogIn(){
-    logInModal.style.display = "none";
-    console.log("Login modal closed");
+function openLoginForm() {
+    loginForm.style.display = "flex";
+    loginForm.style.flexDirection = "column";
+    loginForm.style.alignItems = "center";
+    loginForm.style.justifyContent = "center";
 }
 
-function openSignUp(){
-    signUpModal.style.display = "flex";
-    logInModal.style.display = "none";
-    signUpModal.style.flexDirection = "column";
-    signUpModal.style.alignItems = "center";
-    signUpModal.style.justifyContent = "center";
-    console.log("Sign Up modal opened");
+
+function closeForm(form) {
+    form.style.display = "none";
 }
 
-function closeSignUp(){
-    signUpModal.style.display = "none";
-    console.log("Sign Up modal closed");
-}
+function getDatafromSignUp(){
+    let username = document.getElementById("username").value;
+    let password = document.getElementById("password").value;
+    let agreeTerms = document.getElementById("terms").checked;
 
-function goToWorkshop(){
-    window.location.href = "/workshop";
-    console.log("Navigating to workshop page");
-}
+    let info = {
+        "username": username,
 
-function getDataFromForm(event){
-    event.preventDefault(); // Запобігаємо стандартній поведінці форми
-    let formData = new FormData(event.target);
-    let data = {
-        username: formData.get('username'),
-        password: formData.get('password')
+        "password": password,
+
+        "agreeTerms": agreeTerms
     };
+    return info;
+}
+
+// === НОВА ЧАСТИНА: Функція відправки ===
+async function submitRegistration(event) {
+    // 1. Зупиняємо стандартне перезавантаження сторінки
+    event.preventDefault(); 
+
+    // 2. Отримуємо дані з твоєї функції
+    let userData = getDatafromSignUp();
+
     
-    console.log("Form data extracted:", data);
-    return data;
-}
-function logIn(event){
-    let data = getDataFromForm(event);
-    console.log("Login data:", data);
-
-    let response = fetch('/login', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    }).then(response => response.json())
-    .then(result => {
-        console.log("Server response:", result);
-    })
-    .catch(error => {
-        console.error("Error during login request:", error);
-    });
-}
-
-function signUp(event){
-    let data = getDataFromForm(event);
-    console.log("Sign Up data:", data);
-    let response = fetch('/sign_up', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
-    }).then(response => response.json())
-    .then(result => {
-        console.log("Server response:", result);
-    })
-    .catch(error => {
-        console.error("Error during sign up request:", error);
-    });
-}
-
-// Додаємо обробники подій
-openLogInModal.addEventListener('click', openLogIn);
-closeLogInSpan.addEventListener('click', closeLogIn);
-openSignUpModal.addEventListener('click', openSignUp);
-closeSignUpSpan.addEventListener('click', closeSignUp);
-
-let loginForm = document.getElementById("login_form");
-loginForm.addEventListener('submit', logIn);
-let signUpForm = document.getElementById("signUp_form");
-signUpForm.addEventListener('submit', signUp);
-let goToWorkshopBtn = document.getElementById("goToWorkshopBtn");
-goToWorkshopBtn.addEventListener('click', goToWorkshop);
-
-function generateAnonymousID() {
-    return 'user_' + Math.random().toString(36).slice(2, 9);
-}
-
-function setCookie(cname, cvalue, years) {
-    const d = new Date();
-    // 2 роки * 365 днів * 24 години * 60 хвилин * 60 секунд * 1000 мілісекунд
-    d.setTime(d.getTime() + (years * 365 * 24 * 60 * 60 * 1000));
-    let expires = "expires="+ d.toUTCString();
-    // path=/ означає, що кукі доступні на всьому сайті
-    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-    console.log(`Cookie встановлено: ${cname}=${cvalue}`);
-}
-
-// 2. Отримати Cookie за назвою
-function getCookie(cname) {
-    let name = cname + "=";
-    let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split(';');
-    for(let i = 0; i < ca.length; i++) {
-        let c = ca[i];
-        while (c.charAt(0) == ' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
+    if (!userData.agreeTerms) {
+        alert("You must agree to the terms!");
+        return;
     }
-    return "";
+
+    // 4. Відправка на сервер через Fetch
+    try {
+        let response = await fetch('/register', { // Це адреса, яку ми створимо у Flask
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData) // Перетворюємо об'єкт у текст
+        });
+
+        let result = await response.json(); // Чекаємо відповідь від сервера
+
+        if (response.ok) {
+            console.log("Success:", result);
+            alert("Registration successful! Welcome, " + userData.username);
+            closeForm(signUpForm); 
+        } else {
+            alert("Registration error: " + result.message);
+        }
+
+    } catch (error) {
+        console.error("Connection error:", error);
+        alert("Failed to connect to the server.");
+    }
 }
 
-// 3. Видалити Cookie (встановлюємо дату в минулому)
-function deleteCookie(cname) {
-    document.cookie = cname + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    console.log(`Cookie видалено: ${cname}`);
+function calculateAge(birthdate) {
+    let birth = new Date(birthdate);
+    let today = new Date();
+    let age = today.getFullYear() - birth.getFullYear();
+
+    return age;
+}
+if (signUpForm) {
+    submitBtn.addEventListener("click", submitRegistration);
 }
 
-// 4. Генерація випадкового ID для анонімної статистики
-function generateAnonymousID() {
-    return 'user_' + Math.random().toString(36).substr(2, 9);
+
+async function logIn(event) {
+    event.preventDefault();
+
+    let loginUsername = document.getElementById("login-username").value;
+    let loginPassword = document.getElementById("login-password").value;
+
+    try {
+
+        let response = await fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "username": loginUsername,
+                "password": loginPassword
+            })
+        });
+
+
+        let result = await response.json();
+
+   
+        if (response.ok) {
+            console.log("Login Success:", result);
+            alert("Login successful! Welcome back, " + result.username);
+            closeForm(loginForm); 
+        } else {
+
+            alert("Login error: " + result.message);
+        }
+
+    } catch (error) {
+        console.error("Connection error:", error);
+        alert("Failed to connect to the server.");
+    }
 }
+
+function  donthaveaccount() {
+    closeForm(loginForm);
+    openSignUpForm();
+}
+let loginFormElement = document.getElementById("login-form"); // Перевір, чи ID форми співпадає в HTML
+
+
+// Секція "Старт"
+
+function goToLoginFromStart() {
+    closeForm(start);
+    openLoginForm();
+}
+
+function PressStart() {
+    window.location.href = "/webEx";
+}
+
+let goToLoginBtn = document.getElementById("go-to-login");
+let pressStartBtn = document.getElementById("press-start");
+pressStartBtn.addEventListener("click", PressStart);
+goToLoginBtn.addEventListener("click", goToLoginFromStart);
+loginSubmitBtn.addEventListener("click", logIn);
+donthaveaccountlink.addEventListener("click", donthaveaccount);
+signUpbtn.addEventListener("click", openSignUpForm);
+loginbtn.addEventListener("click", openLoginForm);
+getStartedbtn.addEventListener("click", openGetStarted);
+closeSignUp.addEventListener("click", () => closeForm(signUpForm));
+closeLogin.addEventListener("click", () => closeForm(loginForm));
+closeStart.addEventListener("click", () => closeForm(start));

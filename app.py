@@ -1,14 +1,10 @@
-import flask
-from flask import Flask, render_template, request, jsonify
-
+from flask import Flask, render_template, jsonify, request
 
 app = Flask(__name__)
 
-users_db = []  # Simple in-memory user "database"
-@app.route("/")
-def index():
-    return render_template("index.html")
-
+# --- ТИМЧАСОВА БАЗА ДАНИХ (СПИСОК) ---
+# Тут будуть зберігатися користувачі, поки працює сервер
+users_db = [] 
 
 @app.route("/")
 def home():
@@ -20,6 +16,7 @@ def register():
     print("Отримані дані реєстрації:", data)
 
     username = data.get('username')
+    email = data.get('email')
     password = data.get('password')
 
     # Перевірка: чи існує вже такий користувач
@@ -31,6 +28,7 @@ def register():
         # Зберігаємо користувача у наш список
         users_db.append({
             "username": username,
+            "email": email,
             "password": password,
             # Можна додати інші поля
         })
@@ -67,6 +65,5 @@ def login():
     else:
         print("Невірний логін або пароль")
         return jsonify({"message": "Invalid credentials"}), 401
-
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run(port=5000, debug=True)

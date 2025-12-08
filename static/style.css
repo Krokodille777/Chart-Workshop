@@ -114,7 +114,7 @@ span:hover{
     color: red;
 }
 
-.login_body, .signUp_body{
+#login_body, #signUp_body{
     margin: 5% auto 15% auto;
     width: 80%;
     padding: 20px;
