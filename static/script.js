@@ -123,6 +123,7 @@ async function logIn(event) {
         if (response.ok) {
             alert("Login successful! Welcome, " + result.username);
             closeModal(loginModal);
+            goToWorkshop();
             // Тут можна зробити перенаправлення, наприклад:
             // window.location.href = "/workshop"; 
         } else {
@@ -133,6 +134,10 @@ async function logIn(event) {
         console.error("Error:", error);
         alert("Server connection failed.");
     }
+}
+
+function goToWorkshop() {
+    window.location.href = "/workshop";
 }
 
 if (submitLoginBtn) submitLoginBtn.addEventListener("click", logIn);
