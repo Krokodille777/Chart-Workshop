@@ -11,20 +11,92 @@ let closeSignUpSpan = document.getElementById("close_signUp");
 
 // открывашки и закрывашки модалок
 
-function openLogIn(){}
+function openLogIn(){
+    openLogInModal.style.display = "flex";
+    openSignUpModal.style.display = "none";
+    openLogInModal.style.flexDirection = "column";
+    openLogInModal.style.alignItems = "center";
+    openLogInModal.style.justifyContent = "center";
+    console.log("Login modal opened");
+}
 
-function closeLogIn(){}
+function closeLogIn(){
+    logInModal.style.display = "none";
+    console.log("Login modal closed");
+}
 
-function openSignUp(){}
+function openSignUp(){
+    signUpModal.style.display = "flex";
+    logInModal.style.display = "none";
+    signUpModal.style.flexDirection = "column";
+    signUpModal.style.alignItems = "center";
+    signUpModal.style.justifyContent = "center";
+    console.log("Sign Up modal opened");
+}
 
-function closeSignUp(){}
+function closeSignUp(){
+    signUpModal.style.display = "none";
+    console.log("Sign Up modal closed");
+}
 
-function goToWorkshop(){}
+function goToWorkshop(){
+    window.location.href = "/workshop";
+    console.log("Navigating to workshop page");
+}
 
+function getDataFromForm(event){
+    event.preventDefault(); // Запобігаємо стандартній поведінці форми
+    let formData = new FormData(event.target);
+    let data = {
+        username: formData.get('username'),
+        password: formData.get('password')
+    };
+    
+    console.log("Form data extracted:", data);
+    return data;
+}
 function logIn(event){
+    let data = getDataFromForm(event);
+    console.log("Login data:", data);
+
+    let response = fetch('/login', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    }).then(response => response.json())
+    .then(result => {
+        console.log("Server response:", result);
+    })
+    .catch(error => {
+        console.error("Error during login request:", error);
+    });
 }
+
 function signUp(event){
+    let data = getDataFromForm(event);
+    console.log("Sign Up data:", data);
+    let response = fetch('/sign_up', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data)
+    }).then(response => response.json())
+    .then(result => {
+        console.log("Server response:", result);
+    })
+    .catch(error => {
+        console.error("Error during sign up request:", error);
+    });
 }
+
+// Додаємо обробники подій
+openLogInModal.addEventListener('click', openLogIn);
+closeLogInSpan.addEventListener('click', closeLogIn);
+openSignUpModal.addEventListener('click', openSignUp);
+closeSignUpSpan.addEventListener('click', closeSignUp);
 
 let loginForm = document.getElementById("login_form");
 loginForm.addEventListener('submit', logIn);
@@ -33,7 +105,9 @@ signUpForm.addEventListener('submit', signUp);
 let goToWorkshopBtn = document.getElementById("goToWorkshopBtn");
 goToWorkshopBtn.addEventListener('click', goToWorkshop);
 
-
+function generateAnonymousID() {
+    return 'user_' + Math.random().toString(36).slice(2, 9);
+}
 
 function setCookie(cname, cvalue, years) {
     const d = new Date();
