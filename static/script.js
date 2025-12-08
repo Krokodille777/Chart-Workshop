@@ -1,3 +1,7 @@
+// Розробити вебсторінку з інтеграцію функціоналу відповідно до завдання та
+// реалізувати функцію встановлення, читання та видалення (скидання) відповідного
+// cookie. Користувацький ID для анонімної статистики. expires (2 роки)
+
 let openLogInModal = document.getElementById("login");
 let logInModal = document.getElementById("logIn_Modal");
 let closeLogInSpan = document.getElementById("close_login");
@@ -58,5 +62,80 @@ function createAccount( callback = function() {
         signUpModal.style.display = "none";
     }
 }
+
+async function submitSignUpForm(event) {
+    event.preventDefault();
+    let userData = createAccount();
+    }
+
+    try {
+        let response = await fetch('/register', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(userData)
+        });
+        let result = await response.json();
+        console.log(result);
+
+        if (response.ok){
+            alert("Account created successfully!");
+            closeSignUpSpan.onclick();
+        }
+        else {
+            alert("Error: " + result.message);
+        }
+    }
+    catch (error) {
+        console.error('Error:', error);
+        alert("An error occurred while creating the account.");
+    }
+
+let signUpForm = document.getElementById("signUp_form");
+signUpForm.addEventListener('submit', submitSignUpForm);
+
+
+
+async function logIn(event) {
+    event.preventDefault();
+
+    let loginUsername = document.getElementById("login-username").value;
+    let loginPassword = document.getElementById("login-password").value;
+
+    try {
+
+        let response = await fetch('/login', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                "username": loginUsername,
+                "password": loginPassword
+            })
+        });
+
+
+        let result = await response.json();
+
+   
+        if (response.ok) {
+            console.log("Login Success:", result);
+            alert("Login successful! Welcome back, " + result.username);
+            closeForm(loginForm); 
+        } else {
+
+            alert("Login error: " + result.message);
+        }
+
+    } catch (error) {
+        console.error("Connection error:", error);
+        alert("Failed to connect to the server.");
+    }
+}
+let loginForm = document.getElementById("login_form");
+loginForm.addEventListener('submit', logIn);
+
 
 
