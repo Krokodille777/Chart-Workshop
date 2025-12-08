@@ -54,5 +54,12 @@ def login():
     else:
         return jsonify({"message": "Invalid credentials"}), 401
 
+@app.route('/users', methods=['GET'])
+def get_users():
+    return jsonify(users_db), 200
+@app.route('/workshop', methods=['GET'])
+def workshop():
+    return render_template("workshop.html")
+
 if __name__ == "__main__":
     app.run(port=5000, debug=True)
