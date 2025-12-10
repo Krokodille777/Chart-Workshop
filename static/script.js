@@ -1,3 +1,4 @@
+
 const mainLoginBtn = document.getElementById("main_login_btn");
 const goToSignUpLink = document.getElementById("go_to_signup_link");
 
@@ -54,10 +55,12 @@ async function submitRegistration(event) {
     let usernameInput = document.getElementById("signup_username");
     let passwordInput = document.getElementById("signup_password");
     let termsCheckbox = document.getElementById("terms");
+    let acceptCookiescheckBox = document.getElementById("acceptCookies");
     
     let username = usernameInput.value;
     let password = passwordInput.value;
     let agreeTerms = termsCheckbox.checked;
+    let acceptCookies = acceptCookiescheckBox.checked;
 
     if (!agreeTerms) {
         alert("You must agree to the terms!");
@@ -71,7 +74,8 @@ async function submitRegistration(event) {
 
     let userData = {
         "username": username,
-        "password": password
+        "password": password,
+        "acceptCookies": acceptCookies
     };
 
     try {
@@ -135,9 +139,112 @@ async function logIn(event) {
         alert("Server connection failed.");
     }
 }
-
+if (submitLoginBtn) submitLoginBtn.addEventListener("click", logIn);
 function goToWorkshop() {
     window.location.href = "/workshop";
 }
 
+
+function setUserCookie(userId) {
+    document.cookie = "userId=" + userId + "; path=/; max-age=" + 60*60*24*30; // 30 дней
+    console.log("Cookie saved: userId=" + userId);
+}
+
+// === РЕЄСТРАЦІЯ ===
+async function submitRegistration(event) {
+    event.preventDefault();
+
+    let usernameInput = document.getElementById("signup_username");
+    let passwordInput = document.getElementById("signup_password");
+    let termsCheckbox = document.getElementById("terms");
+    let acceptCookiescheckBox = document.getElementById("acceptCookies");
+    
+    let username = usernameInput.value;
+    let password = passwordInput.value;
+    let agreeTerms = termsCheckbox.checked;
+    let acceptCookies = acceptCookiescheckBox.checked;
+
+    if (!agreeTerms) {
+        alert("You must agree to the terms!");
+        return;
+    }
+    if (!username || !password) {
+        alert("Please fill in all fields");
+        return;
+    }
+
+    let userData = {
+        "username": username,
+        "password": password
+    };
+
+    try {
+        let response = await fetch('/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(userData)
+        });
+
+        let result = await response.json();
+
+        if (response.ok) {
+            alert("Registration successful! ID: " + result.userId);
+            
+            // --- ИСПРАВЛЕНИЕ: Если пользователь согласился, сохраняем ID из ответа ---
+            if (acceptCookies && result.userId) {
+                setUserCookie(result.userId);
+            }
+
+            closeModal(signUpModal);
+            openModal(loginModal);
+        } else {
+            alert("Registration error: " + result.message);
+        }
+    } catch (error) {
+        console.error("Error:", error);
+        alert("Server connection failed.");
+    }
+}
+
+if (submitSignUpBtn) submitSignUpBtn.addEventListener("click", submitRegistration);
+
+// === ЛОГІН ===
+async function logIn(event) {
+    event.preventDefault();
+
+    let username = document.getElementById("login_username").value;
+    let password = document.getElementById("login_password").value;
+
+    try {
+        let response = await fetch('/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                "username": username,
+                "password": password
+            })
+        });
+
+        let result = await response.json();
+
+        if (response.ok) {
+            alert("Login successful! Welcome, " + result.username);
+            
+            // При логине тоже можно обновить/установить куки, если нужно
+            if(result.userId) {
+                 // Здесь можно добавить логику проверки: хочет ли юзер сохранять куки при входе
+                 setUserCookie(result.userId);
+            }
+
+            closeModal(loginModal);
+            goToWorkshop();
+        } else {
+            alert("Login error: " + result.message);
+        }
+
+    } catch (error) {
+        console.error("Error:", error);
+        alert("Server connection failed.");
+    }
+}
 if (submitLoginBtn) submitLoginBtn.addEventListener("click", logIn);
