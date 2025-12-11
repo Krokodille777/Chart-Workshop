@@ -1,0 +1,153 @@
+
+
+#workshop-header{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    border-bottom: 2px solid #ccc;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 10px;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    color: #333;
+}
+
+#workshop-header nav{
+    display: flex;
+    justify-content: right;
+    padding: 10px 15px;
+    font-size: 18px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+#workshop-header nav button{
+    background-color: #008CBA;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 10px 15px;
+    font-size: 18px;
+}
+
+#workshop-header nav button:hover{
+    background-color: #007bb5;
+}
+
+.workshop-main{
+    margin-top: 20px;
+    font-size: 18px;
+    color: rgb(50, 50, 50);
+    font-family: Arial, Helvetica, sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+}
+.workshop-main hr{
+    width: 80%;
+    border: 1px solid #ccc;    
+}
+
+.workshop-main h2{
+    font-size: 22px;
+    margin-bottom: 10px;
+    color: #8c8c8c;
+    text-align: center;
+}
+
+.workshop-main h3{
+    font-size: 20px;
+    margin-bottom: 8px;
+    color: #6e6e6e;
+    text-align: center;
+}
+
+.workshop-main button{
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    padding: 10px 15px;
+    font-size: 18px;
+}
+
+.workshop-main button:hover{
+    background-color: #45a049;
+}
+
+#chart-data{
+    margin-top: 30px;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+
+#chart-data table{
+    width: 100%;
+    border-collapse: collapse;
+}
+
+#chart-data th{
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+#chart-data input{
+    width: 80px;
+    padding: 5px;
+    text-align: center;
+    border: none;
+    border-radius: 4px;
+    font-size: 20px;
+}
+
+
+.chart-general {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    gap: 30px;
+    
+}
+
+
+.chart-general #chart-type, #chart-title-div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+#chart-colors{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+select{
+    padding: 8px;
+    font-size: 18px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+#chart-title-div input{
+    width: 300px;
+    padding: 8px;
+    font-size: 18px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}

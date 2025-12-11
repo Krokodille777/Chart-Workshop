@@ -22,19 +22,66 @@
             <div class = "chart-general">
                 <h2> General Settings</h2>
                 <div id = "chart-type" >
+                    <h3>Chart Type</h3>
                     <select id="chart-select">
                         <option value="bar chart">Bar Chart</option>
                         <option value="pie chart">Pie Chart</option>
                     </select>
                 </div>
-                <input type="text" id="chart-title" placeholder="Chart Title">
-            </div>
-                <hr>
-        <div id = "chart-data">
-            <h2> Chart Data </h2>
-            <table>
+                <div id = "chart-title-div">
+                    <h3>Chart Title</h3>
+                    <input type="text" id="chart-title" placeholder="Chart Title">
+                </div>
                 
-            </table>
+            </div>
+            <hr>
+            <div id = "chart-data">
+                <div id="data-table">
+                    <h2> Chart Data </h2>
+                    <table>            
+                    <tr>
+                        <th>X</th>
+                        <th><input type="text"></th>
+                        <th><input type="text"></th>
+                        <th><input type="text"></th>
+                        <th><input type="text"></th>
+                        <th><input type="text"></th>
+                        <th><input type="text"></th>
+                    </tr>
+                    <tr>
+                        <th>Y</th>
+                        <th><input type="text"></th>
+                        <th><input type="text"></th>
+                        <th><input type="text"></th>
+                        <th><input type="text"></th>
+                        <th><input type="text"></th>
+                        <th><input type="text"></th>
+                    </tr>
+                </table>
+                </div>
+                
+                <nav>
+                    <button id="add-column-btn">Add Column</button>
+                    <button id="remove-column-btn">Remove Column</button>
+                </nav>
+                
+            </div>
+            <hr>
+            <div id = "chart-colors">
+                <h2> Chart Colors </h2>
+                <div id="color-inputs">
+                    <select class="color-select">
+                        <option value="red">Red</option>
+                        <option value="blue">Blue</option>
+                        <option value="green">Green</option>
+                        <option value="yellow">Yellow</option>
+                        <option value="orange">Orange</option>
+                        <option value="purple">Purple</option>
+                    </select>
+                </div>
+            </div>
+            <hr>
+            <button id="builder">Build!</button>
         </div>
         <script src ="{{ url_for('static', filename='workshop.js') }}"></script>
     </body>
