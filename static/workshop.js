@@ -51,15 +51,12 @@ function getChartParams() {
     let type = document.getElementById("chart-select").value;
     let chartTitle = document.getElementById("chart-title").value;
 
-    // ВИПРАВЛЕНО: Зчитування даних з input всередині таблиці
-    // Знаходимо всі inputs у рядку заголовка (окрім першого th, який просто текст "Name")
     let nameInputs = document.querySelectorAll("#header-row input");
     let chartdataName = Array.from(nameInputs).map(input => input.value);
 
     // Знаходимо всі inputs у рядку значень
     let valueInputs = document.querySelectorAll("#footer-row input");
-    let chartdatayValue = Array.from(valueInputs).map(input => Number(input.value)); // Конвертуємо у числа
-
+    let chartdatayValue = Array.from(valueInputs).map(input => Number(input.value)); 
     return {
         type,
         chartTitle,
@@ -156,6 +153,34 @@ if(submitBtn) submitBtn.addEventListener("click", function(e) {
     e.preventDefault(); // Щоб форма не перезавантажувала сторінку
     getData();
 });
+function addColumns(){
+    let table = document.getElementById("data-table");
+    let headerRow = document.getElementById("header-row");
+    let footerRow = document.getElementById("footer-row");
+    let newHeaderCell = document.createElement("th");
+    let newHeaderInput = document.createElement("input");
+    newHeaderInput.type = "text";
+    newHeaderInput.placeholder = "Label";
+    newHeaderCell.appendChild(newHeaderInput);
+    headerRow.appendChild(newHeaderCell);
+    let newFooterCell = document.createElement("td");
+    let newFooterInput = document.createElement("input");
+    newFooterInput.type = "text";
+    newFooterInput.placeholder = "Value";
+    newFooterCell.appendChild(newFooterInput);
+    footerRow.appendChild(newFooterCell);
+}
 
-// Кнопка Build відкриває модалку і малює
+function removeColumns(){
+    let headerRow = document.getElementById("header-row");
+    let footerRow = document.getElementById("footer-row");
+    if(headerRow.cells.length > 2){ // Залишаємо мінімум один стовпець
+        headerRow.deleteCell(-1);
+        footerRow.deleteCell(-1);
+    }
+}
+let addColumnBtn = document.getElementById("add-column-btn");
+addColumnBtn.addEventListener("click", addColumns);
+let removeColumnBtn = document.getElementById("remove-column-btn");
+removeColumnBtn.addEventListener("click", removeColumns);
 builderBtn.addEventListener("click", openChartModal);
