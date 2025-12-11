@@ -67,6 +67,20 @@ def login():
 def get_users():
     return jsonify(users_db), 200
 
+@app.route('/chart-params', methods=['POST'])
+def chart_params():
+    data = request.get_json()
+    type = data.get('type')
+    chartdataName = data.get('chartdataName')
+    chartdatayValue = data.get('chartdatayValue')
+
+
+    if not type or not chartdataName or not chartdatayValue:
+        return jsonify({"message": "Missing chart parameters"}), 400
+    print(f"Received chart parameters: {data}")
+    return jsonify({"message": "Chart parameters received"}), 200
+
+
 @app.route('/workshop', methods=['GET'])
 def get_workshops():
     return render_template("workshop.html")
