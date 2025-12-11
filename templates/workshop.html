@@ -3,12 +3,39 @@
 <html>
     <head>
         <title>Workshop</title>
-        <icon>🛠️</icon>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="stylesheet" href="{{ url_for('static', filename='workshop.css') }}">
     </head>
     <body>
+        <header id = "workshop-header">
+            <nav id ="workshop-nav">
+                <button id = "go-back-home">To Home</button>
+                <button class="Profile">👤</button>
+                <button id = "settings-btn">⚙️</button>
+            </nav>
+            <h1 id ="workshop-title">This is Your Personal Diagram Workshop</h1>
+            <h3 id ="workshop-subtitle">Set the parameters for your diagram below. Enjoy! :D</h3>
+        </header>
+        <hr>
+        <div class="workshop-main">
+            <div class = "chart-general">
+                <h2> General Settings</h2>
+                <div id = "chart-type" >
+                    <select id="chart-select">
+                        <option value="bar chart">Bar Chart</option>
+                        <option value="pie chart">Pie Chart</option>
+                    </select>
+                </div>
+                <input type="text" id="chart-title" placeholder="Chart Title">
+            </div>
+                <hr>
+        <div id = "chart-data">
+            <h2> Chart Data </h2>
+            <table>
+                
+            </table>
+        </div>
         <script src ="{{ url_for('static', filename='workshop.js') }}"></script>
     </body>
 </html>
