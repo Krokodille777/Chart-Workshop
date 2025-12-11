@@ -5,6 +5,7 @@
         <title>Workshop</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
         <link rel="stylesheet" href="{{ url_for('static', filename='workshop.css') }}">
     </head>
     <body>
@@ -67,13 +68,14 @@
                 
             </div>
             <hr>
+            <input type = "submit" value = "Submit parameters">
             <button id="builder">Build!</button>
         </div>
         
         <div class = "XTRAS">
             <div id = "chart-modal" class="modal">
                 <div class="modal-content">
-                    <span class="close">&times;</span>
+                    <span id="close">&times;</span>
                     <h1 id = "chart-title-modal"></h1>
                     <canvas id="chartCanvas"></canvas>
                     <div class = "color-legend"></div>

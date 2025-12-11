@@ -71,11 +71,12 @@ def get_users():
 def chart_params():
     data = request.get_json()
     type = data.get('type')
+    chartTitle = data.get('chartTitle')
     chartdataName = data.get('chartdataName')
     chartdatayValue = data.get('chartdatayValue')
 
 
-    if not type or not chartdataName or not chartdatayValue:
+    if not type or not chartTitle or not chartdataName or not chartdatayValue:
         return jsonify({"message": "Missing chart parameters"}), 400
     print(f"Received chart parameters: {data}")
     return jsonify({"message": "Chart parameters received"}), 200
