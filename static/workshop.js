@@ -9,7 +9,7 @@ goBackHomeBtn.addEventListener("click", goBackHome);
 
 let builderBtn = document.getElementById("builder");
 let chartModal = document.getElementById("chart-modal");
-// ВИПРАВЛЕНО: додано document.
+//додано document.
 let closeModalSpan = document.getElementById("close"); 
 
 // --- Логіка Модального вікна ---
@@ -79,10 +79,7 @@ let getData = async function(){
         });
         let result = await response.json();
         
-        // Тут логіка залежить від тебе: 
-        // Якщо ти хочеш просто показати модалку, редірект не потрібен.
-        // Якщо треба редірект:
-        // if(result.status === 'ok'){ window.location.href = "/chart-builder"; }
+  
         
         alert(result.message); // Для тесту
     }
@@ -96,7 +93,7 @@ let getData = async function(){
 function drawChartInModal(chartType, chartTitle, chartdataName, chartdatayValue){
     var ctx = document.getElementById('chartCanvas').getContext('2d');
 
-    // ВАЖЛИВО: Якщо графік вже існує, його треба знищити перед створенням нового
+    // Якщо графік вже існує, його треба знищити перед створенням нового
     if (currentChart) {
         currentChart.destroy();
     }
@@ -147,7 +144,7 @@ function drawChartInModal(chartType, chartTitle, chartdataName, chartdatayValue)
 }
 
 // Прив'язуємо події
-// Якщо кнопка Submit має просто надсилати дані на сервер:
+
 let submitBtn = document.querySelector('input[type="submit"]');
 if(submitBtn) submitBtn.addEventListener("click", function(e) {
     e.preventDefault(); // Щоб форма не перезавантажувала сторінку
