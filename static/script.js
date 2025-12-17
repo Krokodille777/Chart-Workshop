@@ -127,9 +127,7 @@ async function logIn(event) {
         if (response.ok) {
             alert("Login successful! Welcome, " + result.username);
             closeModal(loginModal);
-            goToWorkshop();
-            // Тут можна зробити перенаправлення, наприклад:
-            // window.location.href = "/workshop"; 
+            goToWorkshop(); 
         } else {
             alert("Login error: " + result.message);
         }

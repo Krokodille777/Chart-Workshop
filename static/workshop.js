@@ -9,7 +9,7 @@ goBackHomeBtn.addEventListener("click", goBackHome);
 
 let builderBtn = document.getElementById("builder");
 let chartModal = document.getElementById("chart-modal");
-//додано document.
+
 let closeModalSpan = document.getElementById("close"); 
 
 // --- Логіка Модального вікна ---
